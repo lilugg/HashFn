@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    
+    <a href="#/">主页</a>
+    <a href="#/me">我的</a>
+    <a href="#/you">你的</a>
+    <div id="box"></div>
+    <script>
+        //创建Router类函数
+        class Router{
+            constructor({routes}){ 
+                this.routes = routes 
+                this.init()//初始化函数
+                this.events = {}//定义储存变量
+                this.routes.forEach(item=>{//根据路由表循环遍历 
+                    this.events[item.path] = function () {//用路由表中的path启动函数
+                        box.innerHTML =  item.component//把路由表component的数据给box的innerHTML
+                    }
+                })
+            }
+            init () {
+                window.addEventListener('load',this.updata.bind(this))
+                window.addEventListener('hashchange',this.updata.bind(this))//在window中调用hashchange事件 执行updata函数进行根据路径切换页面
+            }
+            updata () {
+                let path = window.location.hash.slice(1)//截取路径上 # 比如 #/me => /me
+                this.events[path]()//根据path 调用函数
+            }
+        }
+        new Router({//传入路由表数据
+            routes:[{
+                path:"/",
+                component:'主页'
+            },{
+                path:"/me",
+                component:'我的'  
+            },{
+                path:"/you",
+                component:'你的'
+            }]
+        })
+    </script>
+</body>
+</html>
